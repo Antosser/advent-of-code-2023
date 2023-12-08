@@ -1,6 +1,5 @@
 use std::ops::IndexMut;
 
-use itertools::Itertools;
 use regex::Regex;
 
 static CARDS: &str = "23456789TJQKA";
@@ -13,10 +12,6 @@ struct Hand {
 }
 
 fn score(cards: &str) -> u32 {
-    if cards.chars().tuples().all(|(a, b)| a == b) {
-        return 7;
-    }
-
     let mut sorted_instances = vec![0; 13];
     for card in cards.chars() {
         *sorted_instances.index_mut(CARDS.find(card).unwrap()) += 1;
@@ -24,6 +19,9 @@ fn score(cards: &str) -> u32 {
     sorted_instances.sort();
     sorted_instances.reverse();
 
+    if sorted_instances[0] == 5 {
+        return 7;
+    }
     if sorted_instances[0] == 4 {
         return 6;
     }
